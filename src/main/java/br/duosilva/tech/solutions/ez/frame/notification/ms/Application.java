@@ -11,7 +11,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ComponentScan(basePackages = 
 	{
 			"br.duosilva.tech.solutions.ez.frame.notification.ms",
-			"br.duosilva.tech.solutions.ez.frame.notification.ms.adapters.in.listener",
 			"br.duosilva.tech.solutions.ez.frame.notification.ms.infrastructure.config"
 	})
 public class Application {

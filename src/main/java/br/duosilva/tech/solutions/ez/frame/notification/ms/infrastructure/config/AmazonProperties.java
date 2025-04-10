@@ -1,6 +1,10 @@
 package br.duosilva.tech.solutions.ez.frame.notification.ms.infrastructure.config;
-
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
@@ -9,7 +13,6 @@ public class AmazonProperties {
 
 	private String region;
 	private Credentials credentials;
-
 
 	public static class Credentials {
 		private String accessKey;
@@ -48,4 +51,16 @@ public class AmazonProperties {
 		this.credentials = credentials;
 	}
 
+	@Bean
+	public AmazonSimpleEmailService amazonSimpleEmailService() {
+		BasicAWSCredentials awsCredentials = new BasicAWSCredentials(
+				credentials.getAccessKey(),
+				credentials.getSecretKey()
+		);
+
+		return AmazonSimpleEmailServiceClientBuilder.standard()
+				.withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
+				.withRegion(region)
+				.build();
+	}
 }
