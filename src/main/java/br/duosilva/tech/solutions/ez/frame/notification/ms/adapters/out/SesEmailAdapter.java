@@ -20,7 +20,7 @@ public class SesEmailAdapter {
     public void sendEmail(Notification notification) {
         try {
             SendEmailRequest request = new SendEmailRequest()
-                    .withSource("tchfernando@gmail.com")
+                    .withSource(notification.getEmail())
                     .withDestination(new Destination().withToAddresses(notification.getEmail()))
                     .withMessage(new Message()
                             .withSubject(new Content("Falha no Processamento do Vídeo"))

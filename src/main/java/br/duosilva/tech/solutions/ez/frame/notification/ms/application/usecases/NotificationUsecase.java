@@ -15,7 +15,7 @@ public class NotificationUsecase implements NotificationService {
 
     @Override
     public void sendNotification(Notification notification) {
-        if (!"failed".equals(notification.getStatus())) {
+        if (!"failed".equalsIgnoreCase(notification.getStatus())) {
             throw new IllegalArgumentException("Notificação só pode ser enviada para falhas. Status: " + notification.getStatus());
         }
         if (notification.getEmail() == null || notification.getEmail().isEmpty()) {
