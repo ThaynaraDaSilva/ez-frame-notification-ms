@@ -9,10 +9,4 @@ class ApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
-//	@Test
-//	void testMainMethod() {
-//		Application.main(new String[]{});
-//	}
-
 }
