@@ -1,6 +1,7 @@
 package br.duosilva.tech.solutions.ez.frame.notification.ms.adapters.out;
 
 import br.duosilva.tech.solutions.ez.frame.notification.ms.domain.model.Notification;
+import br.duosilva.tech.solutions.ez.frame.notification.ms.domain.service.NotificationService;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
 import com.amazonaws.services.simpleemail.model.*;
 import org.slf4j.Logger;
@@ -8,12 +9,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SesEmailAdapter {
+public class SesNotificationAdapter implements NotificationService {
 
-    private static final Logger logger = LoggerFactory.getLogger(SesEmailAdapter.class);
+    private static final Logger logger = LoggerFactory.getLogger(SesNotificationAdapter.class);
     private final AmazonSimpleEmailService sesClient;
 
-    public SesEmailAdapter(AmazonSimpleEmailService sesClient) {
+    public SesNotificationAdapter(AmazonSimpleEmailService sesClient) {
         this.sesClient = sesClient;
     }
 

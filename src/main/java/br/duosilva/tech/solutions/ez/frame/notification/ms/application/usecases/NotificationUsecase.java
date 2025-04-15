@@ -1,26 +1,34 @@
 package br.duosilva.tech.solutions.ez.frame.notification.ms.application.usecases;
 
-import br.duosilva.tech.solutions.ez.frame.notification.ms.adapters.out.SesEmailAdapter;
+import br.duosilva.tech.solutions.ez.frame.notification.ms.application.dto.NotificationRequest;
 import br.duosilva.tech.solutions.ez.frame.notification.ms.domain.model.Notification;
 import br.duosilva.tech.solutions.ez.frame.notification.ms.domain.service.NotificationService;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
-public class NotificationUsecase implements NotificationService {
-    private final SesEmailAdapter sesEmailAdapter;
+@Component
+public class NotificationUsecase {
 
-    public NotificationUsecase(SesEmailAdapter sesEmailAdapter) {
-        this.sesEmailAdapter = sesEmailAdapter;
+    private final NotificationService notificationService;
+
+    public NotificationUsecase(NotificationService notificationService) {
+        this.notificationService = notificationService;
     }
 
-    @Override
-    public void sendNotification(Notification notification) {
-        if (!"failed".equalsIgnoreCase(notification.getStatus())) {
-            throw new IllegalArgumentException("Notificação só pode ser enviada para falhas. Status: " + notification.getStatus());
+    public void sendNotification(NotificationRequest request) {
+        if (!"failed".equalsIgnoreCase(request.getStatus())) {
+            throw new IllegalArgumentException("Notificação só pode ser enviada para falhas. Status: " + request.getStatus());
         }
-        if (notification.getEmail() == null || notification.getEmail().isEmpty()) {
+        if (request.getEmail() == null || request.getEmail().isEmpty()) {
             throw new IllegalArgumentException("E-mail do destinatário é obrigatório");
-        }
-        sesEmailAdapter.sendEmail(notification);
+        }   
+
+        Notification notification = new Notification(
+                request.getVideoId(),
+                request.getStatus(),
+                request.getErrorMessage(),
+                request.getEmail()
+        );
+
+        notificationService.sendEmail(notification);
     }
 }
