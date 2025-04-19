@@ -1,4 +1,4 @@
-name: Ez Notification MS CI Pipeline
+name: Notification MS CI Pipeline
 
 on:
   push:
