@@ -1,4 +1,4 @@
-name: Notification MS CI Pipeline
+name: Notification MS CI/CD Pipeline
 
 on:
   push:

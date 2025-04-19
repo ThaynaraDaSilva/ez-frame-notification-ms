@@ -5,7 +5,7 @@ metadata:
   labels:
     app: ez-frame-notification-ms
 spec:
-  replicas: 2
+  replicas: 1
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -59,4 +59,4 @@ spec:
               port: 8080
             initialDelaySeconds: 40
             periodSeconds: 10
-            failureThreshold: 3
+            failureThreshold: 4
