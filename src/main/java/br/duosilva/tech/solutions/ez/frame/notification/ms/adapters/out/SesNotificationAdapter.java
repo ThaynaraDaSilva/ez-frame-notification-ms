@@ -13,6 +13,7 @@ public class SesNotificationAdapter implements NotificationService {
 
     private static final Logger logger = LoggerFactory.getLogger(SesNotificationAdapter.class);
     private final AmazonSimpleEmailService sesClient;
+    private static final String sourceEmail = "tchfernando@gmail.com";
 
     public SesNotificationAdapter(AmazonSimpleEmailService sesClient) {
         this.sesClient = sesClient;
@@ -21,7 +22,7 @@ public class SesNotificationAdapter implements NotificationService {
     public void sendEmail(Notification notification) {
         try {
             SendEmailRequest request = new SendEmailRequest()
-                    .withSource(notification.getEmail())
+                    .withSource(sourceEmail)
                     .withDestination(new Destination().withToAddresses(notification.getEmail()))
                     .withMessage(new Message()
                             .withSubject(new Content("Falha no Processamento do Vídeo"))
