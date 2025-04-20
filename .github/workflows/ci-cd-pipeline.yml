@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - feature/deploy-ms-aws-config
 
 env:
   SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
