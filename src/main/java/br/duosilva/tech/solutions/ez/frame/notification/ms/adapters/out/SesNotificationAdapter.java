@@ -13,7 +13,7 @@ public class SesNotificationAdapter implements NotificationService {
 
     private static final Logger logger = LoggerFactory.getLogger(SesNotificationAdapter.class);
     private final AmazonSimpleEmailService sesClient;
-    private static final String sourceEmail = "tchfernando@gmail.com";
+    private static final String sourceEmail = "dsilva.thay@gmail.com";
 
     public SesNotificationAdapter(AmazonSimpleEmailService sesClient) {
         this.sesClient = sesClient;
