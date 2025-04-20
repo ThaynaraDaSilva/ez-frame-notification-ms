@@ -15,6 +15,7 @@ class SesNotificationAdapterTest {
 
     private AmazonSimpleEmailService sesClient;
     private SesNotificationAdapter adapter;
+    
 
     @BeforeEach
     void setUp() {
@@ -41,7 +42,7 @@ class SesNotificationAdapterTest {
 
         SendEmailRequest request = captor.getValue();
 
-        assertEquals("user@example.com", request.getSource());
+        assertEquals("dsilva.thay@gmail.com", request.getSource());
         assertEquals("user@example.com", request.getDestination().getToAddresses().get(0));
         assertTrue(request.getMessage().getSubject().getData().contains("Falha"));
         assertTrue(request.getMessage().getBody().getText().getData().contains("Erro de transcodificação"));
