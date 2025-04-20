@@ -5,7 +5,7 @@ metadata:
   labels:
     app: ez-frame-notification-ms
 spec:
-  type: ClusterIP # Internal communication
+  type: LoadBalancer # Internal communication
   selector:
     app: ez-frame-notification-ms
   ports:
