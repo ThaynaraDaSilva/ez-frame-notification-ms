@@ -11,18 +11,18 @@ O **Notification Service** é um microserviço da solução `ez-frame`, respons�
 
 ## 🧩 Desenho de Arquitetura
 
-O diagrama abaixo representa o fluxo do Notification Service dentro da solução ez-frame, focando na **notificação de falhas**:
+O diagrama abaixo representa o fluxo do `Notification Service` dentro da solução `ez-frame`, focando na **notificação de falhas**:
 
-![image](https://github.com/user-attachments/assets/16b461f1-254c-4a27-b219-eeb3b0914b92)
+![image](https://github.com/user-attachments/assets/6550bc61-3e8b-4336-9b31-55b5dd910039)
 
-> Para visualizar o diagrama, cole o script abaixo em [PlantText](https://www.planttext.com/).
+> Para visualizar o diagrama, cole o script abaixo in PlantText.
 
 ```
 @startuml
 !define RECTANGLE class
 !includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
-Container(ingestionService, "Ingestion Service", "Spring Boot (Java 21)", "Faz upload de vídeo e após retorno do processador, envia somente falhas")
+Container(ingestionService, "Ingestion Service", "Spring Boot (Java 21)", "Recebe status do Generator Service e envia falhas ao Notification Service")
 Container(notificationService, "Notification Service", "Spring Boot (Java 21)", "Envia e-mails")
 Container(ses, "SES", "Envia e-mails")
 
@@ -42,10 +42,10 @@ skinparam backgroundColor #FFFFFF
 
 ## ✅ Pré-requisitos
 
-- ☕ Java 21 instalado  
-- 📦 Maven instalado  
-- 🔐 Credenciais AWS configuradas (`AWS CLI` ou arquivo `~/.aws/credentials`)  
-- 📧 Acesso ao Amazon SES com permissões adequadas  
+- ☕ Java 21 instalado
+- 📦 Maven instalado
+- 🔐 Credenciais AWS configuradas (`AWS CLI` ou arquivo `~/.aws/credentials`)
+- 📧 Acesso ao Amazon SES com permissões adequadas
 - 📨 Endereço de e-mail de origem verificado no SES (ex.: `seu-email@dominio.com`)
 
 ---
@@ -100,6 +100,7 @@ server:
 ```
 
 ### 3️⃣ Compile e execute o projeto
+
 ```bash
 mvn clean install
 mvn spring-boot:run
@@ -112,6 +113,7 @@ mvn spring-boot:run
 ```http
 POST /send
 ```
+
 📤 Exemplo de Payload
 
 ```json
@@ -119,44 +121,44 @@ POST /send
   "videoId": "123",
   "status": "FAILED",
   "errorMessage": "Erro no processamento",
-  "email": "thaynara-r@hotmail.com"
+  "email": "seu-email@dominio.com"
 }
 ```
+
 🧪 Teste com cURL
+
 ```bash
 curl -X POST http://localhost:8080/send \
   -H "Content-Type: application/json" \
-  -d '{"videoId":"123","status":"FAILED","errorMessage":"Erro no processamento","email":"thaynara-r@hotmail.com"}'
+  -d '{"videoId":"123","status":"FAILED","errorMessage":"Erro no processamento","email":"seu-email@dominio.com"}'
 ```
+
 Ou utilize ferramentas como Postman.
 
 ---
 
-🧱 Componentes da Solução Global ez-frame
+## 🧱 Componentes da Solução Global ez-frame
 
-| **Componente**               | **Finalidade**                                                                 | **Justificativa**                                                                                                                                                                                                                                                                                      |
-|------------------------------|--------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Clean Architecture**       | Organização interna da solução                                                 | Foi escolhida para garantir uma estrutura modular, de fácil manutenção e testes. Essa separação clara entre regras de negócio e infraestrutura facilita a escalabilidade da solução ao longo do tempo, conforme o sistema evolui.                                                                     |
-| **Java 21**                  | Linguagem principal para implementação                                          | A linguagem Java foi adotada em substituição ao .NET por uma decisão estratégica, considerando a expertise da equipe com o ecossistema Java. Essa escolha visa otimizar o desenvolvimento, reduzir a curva de aprendizado e garantir eficiência na evolução e manutenção da solução.                   |
-| **DynamoDB**                 | Armazenamento dos metadados e arquivos gerados (como ZIPs de frames)           | Optamos pelo DynamoDB por ser altamente escalável e disponível, atendendo bem à necessidade de processar múltiplos vídeos em paralelo. Seu modelo NoSQL permite evoluir a estrutura dos dados sem migrações complexas, o que é útil caso futuramente a solução precise armazenar também os vídeos.     |
-| **Apache Maven**             | Gerenciamento de dependências e build                                          | Ferramenta amplamente utilizada no ecossistema Java, facilita a organização do projeto, o versionamento de dependências e o processo de build e deploy.                                                                                                                                                |
-| **Amazon Cognito**           | Autenticação e segurança no microsserviço de usuários                          | Solução gerenciada que facilita a implementação de autenticação com usuário e senha, atendendo ao requisito de proteger o sistema e controlando o acesso de forma segura e padronizada.                                                                                                               |
-| **Amazon SQS**               | Gerenciamento da fila de processamento de vídeos                               | Utilizamos SQS para garantir que os vídeos sejam processados de forma assíncrona e segura, sem perda de requisições, mesmo em momentos de pico. Isso também ajuda a escalar o sistema com segurança.                                                                                                   |
-| **Amazon EKS**               | Orquestração dos microsserviços da solução                                     | Solução gerenciada baseada em Kubernetes, que facilita o deploy, a escalabilidade e o gerenciamento dos microsserviços (`generator`, `user`, `notification`), mantendo a consistência da infraestrutura.                                                                                                |
-| **Amazon SES**               | Envio de e-mails de notificação em caso de erro                                | Atende ao requisito de notificação automática para o usuário em caso de falha no processamento. É um serviço simples, eficiente e com baixo custo, ideal para esse tipo de comunicação.                                                                                                                 |
-| **GitHub Actions** | Automatização de build, testes e deploys | O GitHub Actions foi escolhido por estar amplamente consolidado no mercado e por oferecer uma integração direta com repositórios GitHub, simplificando pipelines de entrega contínua. Além disso, a equipe já possui familiaridade com a ferramenta, o que reduz tempo de configuração e acelera o processo de entrega contínua. Essa escolha também reflete uma tendência atual de muitas empresas que estão migrando de soluções como Jenkins e Azure DevOps para plataformas mais leves e integradas, como o próprio GitHub Actions. |
+| **Componente** | **Finalidade** | **Justificativa** |
+| --- | --- | --- |
+| **Clean Architecture** | Organização interna da solução | Foi escolhida para garantir uma estrutura modular, de fácil manutenção e testes. Essa separação clara entre regras de negócio e infraestrutura facilita a escalabilidade da solução ao longo do tempo, conforme o sistema evolui. |
+| **Java 21** | Linguagem principal para implementação | A linguagem Java foi adotada em substituição ao .NET por uma decisão estratégica, considerando a expertise da equipe com o ecossistema Java. Essa escolha visa otimizar o desenvolvimento, reduzir a curva de aprendizado e garantir eficiência na evolução e manutenção da solução. |
+| **Apache Maven** | Gerenciamento de dependências e build | Ferramenta amplamente utilizada no ecossistema Java, facilita a organização do projeto, o versionamento de dependências e o processo de build e deploy. |
+| **Amazon EKS** | Orquestração dos microsserviços da solução | Solução gerenciada baseada em Kubernetes, que facilita o deploy, a escalabilidade e o gerenciamento dos microsserviços (`generator`, `ingestion`, `notification`), mantendo a consistência da infraestrutura. |
+| **Amazon SES** | Envio de e-mails de notificação em caso de erro | Atende ao requisito de notificação automática para o usuário em caso de falha no processamento. É um serviço simples, eficiente e com baixo custo, ideal para esse tipo de comunicação. |
+| **GitHub Actions** | Automatização de build, testes e deploys | O GitHub Actions foi escolhido por estar amplamente consolidado no mercado e por oferecer uma integração direta com repositórios GitHub, simplificando pipelines de entrega contínua. Além disso, a equipe já possui familiaridade com a ferramenta, o que reduz tempo de configuração e acelera o processo de entrega contínua. |
 
 ---
 
-🔗 Demais Projetos Relacionados
+## 🔗 Demais Projetos Relacionados
 
-**ez-frame-ingestion-ms** — Microserviço que envia vídeos para a fila de processamento, consulta status e faz integração com o Notification Service para enviar email em caso de falha.
+**ez-frame-ingestion-ms** — Microserviço que envia vídeos para a fila de processamento, consulta status, e chama o `Notification Service` para enviar e-mails em caso de falha.
 
-**ez-frame-generator-ms** — Microserviço que escuta fila para processar vídeos e retornar o status para o Ingestion Service.
+**ez-frame-generator-ms** — Microserviço que escuta a fila SQS para processar vídeos e retorna o status para o `Ingestion Service`.
 
 ---
 
-👨‍💻 Desenvolvido por
+## 👨‍💻 Desenvolvido por
 
 @tchfer — RM357414
 
