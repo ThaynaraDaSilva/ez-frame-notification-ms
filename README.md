@@ -2,7 +2,7 @@
 
 ## 📌 Contextualização
 
-O microsserviço `ez-frame-notification-ms` é responsável por notificar os usuários em caso de falhas no processamento de vídeos. Ele é acionado pelo microsserviço ez-video-ingestion-ms por meio do endpoint `http://host:8080/v1/ms/notification/send` sempre que o status de um vídeo é marcado como `FAILED`.
+O microsserviço `ez-frame-notification-ms` é responsável por notificar os usuários em caso de falhas no processamento de vídeos. Ele é acionado pelo microsserviço `ez-video-ingestion-ms` por meio do endpoint `http://host:8080/v1/ms/notification/send` sempre que o status de um vídeo é marcado como `FAILED`.
 Utiliza o AWS SES (Simple Email Service) para enviar e-mails aos usuários, informando sobre o problema ocorrido durante o processamento.
 
 ---
@@ -25,14 +25,14 @@ Utiliza o AWS SES (Simple Email Service) para enviar e-mails aos usuários, info
 | **GitHub Actions** | Automatização de build, testes e deploys | O GitHub Actions foi escolhido por estar amplamente consolidado no mercado e por oferecer uma integração direta com repositórios GitHub, simplificando pipelines de entrega contínua. Além disso, a equipe já possui familiaridade com a ferramenta, o que reduz tempo de configuração e acelera o processo de entrega contínua. |
 | **Amazon Cognito**           | Autenticação e segurança no microsserviço de usuários                          | Solução gerenciada que facilita a implementação de autenticação com usuário e senha, atendendo ao requisito de proteger o sistema e controlando o acesso de forma segura e padronizada.                                                                                                               |
 | **Amazon SQS**               | Gerenciamento da fila de processamento de vídeos                               | Utilizamos SQS para garantir que os vídeos sejam processados de forma assíncrona e segura, sem perda de requisições, mesmo em momentos de pico. Isso também ajuda a escalar o sistema com segurança.                                                                                                   |
-| **DynamoDB**                 | Armazenamento dos metadados e arquivos gerados (como ZIPs de frames)           | Optamos pelo DynamoDB por ser altamente escalável e disponível, atendendo bem à necessidade de processar múltiplos vídeos em paralelo. Seu modelo NoSQL permite evoluir a estrutura dos dados sem migrações complexas, o que é útil caso futuramente a solução precise armazenar também os vídeos.     |
+| **DynamoDB**                 | Armazenamento dos metadados           | Optamos pelo DynamoDB por ser altamente escalável e disponível, atendendo bem à necessidade de processar múltiplos vídeos em paralelo. Seu modelo NoSQL permite evoluir a estrutura dos dados sem migrações complexas, o que é útil caso futuramente a solução precise armazenar também os vídeos.     |
 | **Amazon S3** | Armazenamento de vídeos e arquivos ZIP gerados | O S3 foi adotado por ser um serviço de armazenamento de objetos altamente durável, escalável e econômico, perfeito para armazenar vídeos enviados pelos usuários e arquivos ZIP gerados pelo `ez-frame-generator-ms` (bucket `ez-frame-video-storage`). Permite o compartilhamento seguro dos arquivos gerados via presigned URLs e suporta vídeos grandes e múltiplos uploads com facilidade. |
 
 ---
 
 ## 🧩 Fluxo de Interação entre Serviços
 
-O diagrama abaixo ilustra o fluxo do `ez-frame-notification-ms` (em vermelho) e suas interações com outros componentes do sistema.
+O diagrama abaixo ilustra o fluxo do `ez-frame-notification-ms` ***(em vermelho)*** e suas interações com outros componentes do sistema.
 
 ![image](https://github.com/user-attachments/assets/8081bc86-2c7a-4041-affb-ba3841e22d92)
 
@@ -52,6 +52,9 @@ O diagrama abaixo ilustra o fluxo do `ez-frame-notification-ms` (em vermelho) e 
 - 🛡️ **Criar usuário IAM com política SES para envio de e-mails**  
   - Permissões necessárias: `ses:SendEmail` e `ses:SendRawEmail`
   - Exemplo de **policy JSON** para colar na criação da política no IAM:
+- 📄 Configurar as filas:
+  - `video-processing-queue`
+  - `video-processing-queue-dlq`
 
 ```json
 {
