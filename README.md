@@ -23,8 +23,35 @@ O diagrama abaixo ilustra o fluxo do `ez-frame-notification-ms` (em vermelho) e 
 - 📦 Maven instalado
 - 🔐 Credenciais AWS configuradas no repositório como SECRETS
 - 🔐 Credenciais do SonarQube configuradas no repositório como SECRETS
-- 📧 Criar entity (endereço de e-mail de origem verificado no SES) no Amazon SES e usuário e política no IAM (sendEmail, sendRawEmail)
 - Criar userpool e appClient no Cognito
+- 📧 Criar entity (endereço de e-mail de origem verificado no SES) no Amazon SES e usuário e política no IAM (sendEmail, sendRawEmail)
+
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ses:SendEmail",
+                "ses:SendRawEmail"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+```
+
+---
+
+## ✅ Requisito para execução da solução
+
+Criar ambiente e realizar deploy na seguinte ordem:
+1. Infra - Link pro repo
+2. Ingestion - Link
+3. Generator - Link
+4. Notification - Link
 
 ---
 
@@ -70,11 +97,9 @@ ez-frame-notification-ms/
 
 ---
 
-## 🔗 Demais Projetos Relacionados
+## 🔗 Links dos vídeos de apresentação
 
-**ez-frame-ingestion-ms** — Microserviço que serve como porta de entrada para o upload e gerenciamento de vídeos.
-
-**ez-frame-generator-ms** — Microserviço que é responsável pelo processamento assíncrono de vídeos, gerando frames e arquivos compactados.
+Vídeos em ordem
 
 ---
 
