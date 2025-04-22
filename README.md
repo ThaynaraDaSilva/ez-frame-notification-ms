@@ -1,42 +1,19 @@
-# 📬 Notification Service (`ez-frame-notification-ms`)
+# 📬 ez-frame-notification-ms
 
 ## 📌 Contextualização
 
-O **Notification Service** é um microserviço da solução `ez-frame`, responsável por enviar notificações por **e-mail** aos usuários em caso de **falha no processamento de vídeos**.
+O microserviço `ez-frame-notification-ms` é responsável por notificar usuários sobre falhas no processamento de vídeos. Suas principais funções incluem:
 
-- Ele expõe um **endpoint HTTP** que é chamado pelo `Ingestion Service` quando o status do vídeo é `"FAILED"`.
-- Utiliza o **Amazon SES** para envio dos e-mails.
+- **Recebimento de notificações**: Processa chamadas do `ez-video-ingestion-ms` no endpoint `/send` quando o status do vídeo é `FAILED`.
+- **Envio de e-mails**: Utiliza o AWS SES para enviar notificações por e-mail aos usuários, informando sobre o problema ocorrido.
 
 ---
 
-## 🧩 Desenho de Arquitetura
+## 🧩 Desenho de Fluxo
 
-O diagrama abaixo representa o fluxo do `Notification Service` dentro da solução `ez-frame`, focando na **notificação de falhas**:
+O diagrama abaixo ilustra o fluxo do `ez-frame-notification-ms` (em vermelho) e suas interações com outros componentes do sistema.
 
-![image](https://github.com/user-attachments/assets/6550bc61-3e8b-4336-9b31-55b5dd910039)
-
-> Para visualizar o diagrama, cole o script abaixo in PlantText.
-
-```
-@startuml
-!define RECTANGLE class
-!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
-
-Container(ingestionService, "Ingestion Service", "Spring Boot (Java 21)", "Recebe status do Generator Service e envia falhas ao Notification Service")
-Container(notificationService, "Notification Service", "Spring Boot (Java 21)", "Envia e-mails")
-Container(ses, "SES", "Envia e-mails")
-
-' Relacionamentos
-ingestionService --> notificationService : "1. Chama endpoint (falhas, HTTP)"
-notificationService --> ses : "2. Envia e-mail ao usuário (falha)"
-
-' Estilização
-skinparam monochrome true
-skinparam shadowing false
-skinparam backgroundColor #FFFFFF
-
-@enduml
-```
+![image](https://github.com/user-attachments/assets/7b1bd033-b96d-4704-81c0-9ab3635d22df)
 
 ---
 
@@ -62,12 +39,12 @@ ez-frame-notification-ms/
 │   │   │   └── br/duosilva/tech/solutions/ez/frame/notification/ms/
 │   │   │       ├── adapters/
 │   │   │       │   ├── in/
-│   │   │       │   │   └── controller/       # Controladores REST (ex.: NotificationController)
+│   │   │       │   │   └── controller/       # Controladores REST
 │   │   │       │   └── out/
-│   │   │       │       └── email/           # Integração com SES (ex.: EmailAdapter)
+│   │   │       │       └── email/           # Integração com SES
 │   │   │       ├── application/
-│   │   │       │   ├── dto/                 # DTOs (ex.: NotificationRequest)
-│   │   │       │   └── usecases/            # Casos de uso (ex.: SendNotificationUseCase)
+│   │   │       │   ├── dto/                 # DTOs
+│   │   │       │   └── usecases/            # Casos de uso
 │   │   │       ├── domain/
 │   │   │       │   └── model/               # Modelos de domínio
 │   │   │       └── config/                  # Configurações
@@ -108,35 +85,6 @@ mvn spring-boot:run
 
 ---
 
-📡 Teste o Endpoint HTTP
-
-```http
-POST /send
-```
-
-📤 Exemplo de Payload
-
-```json
-{
-  "videoId": "123",
-  "status": "FAILED",
-  "errorMessage": "Erro no processamento",
-  "email": "seu-email@dominio.com"
-}
-```
-
-🧪 Teste com cURL
-
-```bash
-curl -X POST http://localhost:8080/send \
-  -H "Content-Type: application/json" \
-  -d '{"videoId":"123","status":"FAILED","errorMessage":"Erro no processamento","email":"seu-email@dominio.com"}'
-```
-
-Ou utilize ferramentas como Postman.
-
----
-
 ## 🧱 Componentes da Solução Global ez-frame
 
 | **Componente** | **Finalidade** | **Justificativa** |
@@ -152,9 +100,9 @@ Ou utilize ferramentas como Postman.
 
 ## 🔗 Demais Projetos Relacionados
 
-**ez-frame-ingestion-ms** — Microserviço que envia vídeos para a fila de processamento, consulta status, e chama o `Notification Service` para enviar e-mails em caso de falha.
+**ez-frame-ingestion-ms** — Microserviço que serve como porta de entrada para o upload e gerenciamento de vídeos.
 
-**ez-frame-generator-ms** — Microserviço que escuta a fila SQS para processar vídeos e retorna o status para o `Ingestion Service`.
+**ez-frame-generator-ms** — Microserviço que é responsável pelo processamento assíncrono de vídeos, gerando frames e arquivos compactados.
 
 ---
 
