@@ -112,11 +112,15 @@ ez-frame-notification-ms/
 
 ## 🎥 Vídeos de apresentação
 
-1. [📐 Desenho de Arquitetura](https://youtu.be/ry-GS9WqmaU)
-2. [🔧 Github Rulesets, Pipelines e Sonarqube](https://youtu.be/jqO4ldizBwY)
-3. [🔐 Jornada de Login e Upload de Vídeo](https://youtu.be/sk-AvQ9TnIw)
-4. [📧 Jornada de Envio de Notificação](https://youtu.be/mE9PhuUo4Co)
-5. [🖼️ Jornada de Geração de Frames](https://youtu.be/bfRUG1w-S8w)
+[📐 Desenho de Arquitetura](https://youtu.be/ry-GS9WqmaU)
+
+[🔧 Github Rulesets, Pipelines e Sonarqube](https://youtu.be/jqO4ldizBwY)
+
+[🔐 Jornada de Login e Upload de Vídeo](https://youtu.be/sk-AvQ9TnIw)
+
+[📧 Jornada de Envio de Notificação](https://youtu.be/mE9PhuUo4Co)
+
+[🖼️ Jornada de Geração de Frames](https://youtu.be/bfRUG1w-S8w)
 
 ---
 
