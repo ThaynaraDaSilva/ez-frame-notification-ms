@@ -9,6 +9,12 @@ O microserviço `ez-frame-notification-ms` é responsável por notificar usuári
 
 ---
 
+## 🧩 Desenho de Arquitetura
+
+![image](https://github.com/user-attachments/assets/da998aa9-deb2-48fc-9025-06d3e1dfb0d1)
+
+---
+
 ## 🧩 Fluxo de Interação entre Serviços
 
 O diagrama abaixo ilustra o fluxo do `ez-frame-notification-ms` (em vermelho) e suas interações com outros componentes do sistema.
