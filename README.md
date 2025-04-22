@@ -4,26 +4,27 @@
 
 O microserviço `ez-frame-notification-ms` é responsável por notificar usuários sobre falhas no processamento de vídeos. Suas principais funções incluem:
 
-- **Recebimento de notificações**: Processa chamadas do `ez-video-ingestion-ms` no endpoint `/send` quando o status do vídeo é `FAILED`.
+- **Envio de notificações**: Processa chamadas do `ez-video-ingestion-ms` no endpoint `/send` quando o status do vídeo é `FAILED`.
 - **Envio de e-mails**: Utiliza o AWS SES para enviar notificações por e-mail aos usuários, informando sobre o problema ocorrido.
 
 ---
 
-## 🧩 Desenho de Fluxo
+## 🧩 Fluxo de Interação entre Serviços
 
 O diagrama abaixo ilustra o fluxo do `ez-frame-notification-ms` (em vermelho) e suas interações com outros componentes do sistema.
 
-![image](https://github.com/user-attachments/assets/7b1bd033-b96d-4704-81c0-9ab3635d22df)
+![image](https://github.com/user-attachments/assets/afeb5381-5d47-4cd2-a5a0-c87ec59c1a1d)
 
 ---
 
-## ✅ Pré-requisitos
+## ✅ Pré-requisitos para solução ez-frame (Todos os Microserviços)
 
 - ☕ Java 21 instalado
 - 📦 Maven instalado
-- 🔐 Credenciais AWS configuradas (`AWS CLI` ou arquivo `~/.aws/credentials`)
-- 📧 Acesso ao Amazon SES com permissões adequadas
-- 📨 Endereço de e-mail de origem verificado no SES (ex.: `seu-email@dominio.com`)
+- 🔐 Credenciais AWS configuradas no repositório como SECRETS
+- 🔐 Credenciais do SonarQube configuradas no repositório como SECRETS
+- 📧 Criar entity (endereço de e-mail de origem verificado no SES) no Amazon SES e usuário e política no IAM (sendEmail, sendRawEmail)
+- Criar userpool e appClient no Cognito
 
 ---
 
@@ -52,35 +53,6 @@ ez-frame-notification-ms/
 │   │       └── application.yml              # Configurações do Spring Boot
 ├── pom.xml                                     # Arquivo Maven com dependências
 └── README.md                                   # Documentação do projeto
-```
-
----
-
-## 🛠️ Como Compilar o Projeto
-
-### 1️⃣ Clone o repositório
-
-```bash
-git clone https://github.com/ThaynaraDaSilva/ez-frame-notification-ms.git
-cd ez-frame-notification-ms
-```
-
-### 2️⃣ Configure o arquivo application.yml
-
-```bash
-aws:
-  region: us-east-1
-  ses:
-    source-email: seu-email@dominio.com
-server:
-  port: 8080
-```
-
-### 3️⃣ Compile e execute o projeto
-
-```bash
-mvn clean install
-mvn spring-boot:run
 ```
 
 ---
